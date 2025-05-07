@@ -4,6 +4,7 @@ import com.ead.course.enums.CourseLevel;
 import com.ead.course.enums.CourseStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import lombok.ToString;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -22,7 +24,7 @@ import java.util.UUID;
 @ToString
 @RequiredArgsConstructor
 @Table(name = "TB_COURSES")
-public class CouseModel implements Serializable {
+public class CourseModel implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -57,5 +59,9 @@ public class CouseModel implements Serializable {
 
     @Column(length = 255)
     private String imageUrl;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @OneToMany(mappedBy = "course")
+    private Set<ModuleModel> modules;
 
 }
