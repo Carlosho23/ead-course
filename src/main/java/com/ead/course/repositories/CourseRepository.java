@@ -7,4 +7,6 @@ import java.util.UUID;
 
 public interface CourseRepository extends JpaRepository<CourseModel, UUID> {
 
+    void delete(CourseModel courseModel);
+
 }
