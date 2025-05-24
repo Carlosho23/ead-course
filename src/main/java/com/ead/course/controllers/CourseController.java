@@ -6,15 +6,16 @@ import com.ead.course.services.CourseService;
 import com.ead.course.specifications.SpecificationTemplate;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
+@Log4j2
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/courses")
@@ -24,7 +25,9 @@ public class CourseController {
 
     @PostMapping
     public ResponseEntity<Object> saveCourse(@RequestBody @Valid CourseRecordDto courseRecordDto) {
+        log.debug("POST saveCourse courseRecordDto received {} ", courseRecordDto);
         if (courseService.existsByName(courseRecordDto.name())) {
+            log.warn("Course Name {} is Already Taken. ", courseRecordDto.name());
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Course Name Already Taken!");
         }
 
@@ -43,6 +46,7 @@ public class CourseController {
 
     @DeleteMapping("/{courseId}")
     public ResponseEntity<Object> deleteCourse(@PathVariable(value = "courseId") UUID courseId) {
+        log.debug("DELETE deleteCourse courseId received {} ", courseId);
         courseService.delete(courseService.findById(courseId).get());
         return ResponseEntity.status(HttpStatus.OK).body("Course deleted successfully!");
     }
@@ -50,7 +54,7 @@ public class CourseController {
     @PutMapping("/{courseId}")
     public ResponseEntity<Object> updateCourse(@PathVariable(value = "courseId") UUID courseId,
                                                @RequestBody @Valid CourseRecordDto courseRecordDto) {
-
+        log.debug("PUT updateCourse courseRecordDto received {} ", courseRecordDto);
         return ResponseEntity.status(HttpStatus.OK).body(courseService.update(courseRecordDto, courseService.findById(courseId).get()));
     }
 }
