@@ -3,10 +3,9 @@ package com.ead.course.models;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -14,11 +13,19 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
-@ToString
-@RequiredArgsConstructor
 @Table(name = "TB_COURSES_USERS")
 public class CourseUserModel implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
+
+    public CourseUserModel(UUID id, UUID userId, CourseModel course) {
+        this.id = id;
+        this.userId = userId;
+        this.course = course;
+    }
+
+    public CourseUserModel() {
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
