@@ -4,6 +4,7 @@ import com.ead.course.dtos.CourseRecordDto;
 import com.ead.course.models.CourseModel;
 import com.ead.course.services.CourseService;
 import com.ead.course.specifications.SpecificationTemplate;
+import com.ead.course.validations.CourseValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -22,15 +24,16 @@ import java.util.UUID;
 public class CourseController {
 
     final CourseService courseService;
+    final CourseValidator courseValidator;
 
     @PostMapping
-    public ResponseEntity<Object> saveCourse(@RequestBody @Valid CourseRecordDto courseRecordDto) {
+    public ResponseEntity<Object> saveCourse(@RequestBody CourseRecordDto courseRecordDto, Errors errors) {
         log.debug("POST saveCourse courseRecordDto received {} ", courseRecordDto);
-        if (courseService.existsByName(courseRecordDto.name())) {
-            log.warn("Course Name {} is Already Taken. ", courseRecordDto.name());
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Course Name Already Taken!");
-        }
 
+        courseValidator.validate(courseRecordDto, errors);
+        if (errors.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.getAllErrors());
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(courseService.save(courseRecordDto));
     }
 
