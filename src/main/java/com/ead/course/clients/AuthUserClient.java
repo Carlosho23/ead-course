@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
@@ -68,7 +67,7 @@ public class AuthUserClient {
         String url = baseUrlAuthuser + "/users/" + userId + "/courses/subscription";
         log.debug("Request URL: {}", url);
 
-        try{
+        try {
             var courseUserRecordDto = new CourseUserRecordDto(courseId, userId);
             restClient.post()
                     .uri(url)
@@ -80,6 +79,21 @@ public class AuthUserClient {
         } catch (RestClientException e) {
             log.error("Error Request POST RestClient with cause: {} ", e.getMessage());
             throw new RuntimeException("Error Request POST RestClient: ", e);
+        }
+    }
+
+    public void deleteCourseUserInAuthUser(UUID courseId) {
+        String url = baseUrlAuthuser + "/users/courses/" + courseId;
+        log.debug("Request URL: {}", url);
+
+        try {
+            restClient.delete()
+                    .uri(url)
+                    .retrieve()
+                    .toBodilessEntity();
+        } catch (RestClientException e) {
+            log.error("Error Request DELETE RestClient with cause: {} ", e.getMessage());
+            throw new RuntimeException("Error Request DELETE RestClient: ", e);
         }
     }
 
