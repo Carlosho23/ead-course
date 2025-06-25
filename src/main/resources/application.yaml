@@ -23,7 +23,7 @@ spring:
 ead:
   api:
     url:
-      authuser: 'http://localhost:8087/ead-authuser'
+      authuser: 'http://ead-authuser-service/ead-authuser'
 
 eureka:
   client:
