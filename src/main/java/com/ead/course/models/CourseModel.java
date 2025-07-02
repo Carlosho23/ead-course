@@ -65,12 +65,4 @@ public class CourseModel implements Serializable {
 //    @OnDelete(action = OnDeleteAction.CASCADE) caso precise de uma deleção em cascata
     private Set<ModuleModel> modules;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
-    private Set<CourseUserModel> courseUsers;
-
-    public CourseUserModel convertToCourseUserModel(UUID userId) {
-        return new CourseUserModel(null, userId, this);
-    }
-
 }
