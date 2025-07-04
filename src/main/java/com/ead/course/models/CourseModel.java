@@ -65,4 +65,11 @@ public class CourseModel implements Serializable {
 //    @OnDelete(action = OnDeleteAction.CASCADE) caso precise de uma deleção em cascata
     private Set<ModuleModel> modules;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // Com acesso de escrita
+    @ManyToMany(fetch = FetchType.LAZY) // muitos para muitos
+    @JoinTable(name = "TB_COURSES_USERS",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")) //Cria uma tabela associativa de user + course
+    private Set<UserModel> users;
+
 }
