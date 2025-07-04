@@ -20,6 +20,9 @@ spring:
           lob:
             non-contextual-creation: true
 
+  rabbitmq:
+    addresses: amqps://xozkkvzu:inlgUeJBLDp7OYDeEazO-_xxtKhdIdqg@beaver.rmq.cloudamqp.com/xozkkvzu
+
 ead:
   api:
     url:
