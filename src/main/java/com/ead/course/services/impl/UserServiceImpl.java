@@ -2,6 +2,7 @@ package com.ead.course.services.impl;
 
 import com.ead.course.exceptions.NotFoundException;
 import com.ead.course.models.UserModel;
+import com.ead.course.repositories.CourseRepository;
 import com.ead.course.repositories.UserRepository;
 import com.ead.course.services.UserService;
 import jakarta.transaction.Transactional;
@@ -19,6 +20,7 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     final UserRepository userRepository;
+    final CourseRepository courseRepository;
 
     @Override
     public Page<UserModel> findAll(Specification<UserModel> spec, Pageable pageable) {
@@ -33,6 +35,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void delete(UUID userId) {
+        courseRepository.deleteCourseUserByUser(userId);
         userRepository.deleteById(userId);
     }
 
